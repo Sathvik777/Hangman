@@ -10,7 +10,7 @@ class GameSession:
 
 
     def __init__(self):
-        self.word_seleted = (self.words[random.randint(0,len(self.words))]).split('')
+        self.word_seleted = (self.words[random.randint(0,len(self.words))])
         self.letters_guessed=[]
         self.number_of_attemps = 0
 
@@ -25,7 +25,8 @@ class GameSession:
             indices = [i for i, x in enumerate(self.word_seleted) if x == requested_letter]
             self.letters_guessed += len(indices) * requested_letter
             self.number_of_attemps += 1
-
+            game_completed = False
+            game_won = False
             if(self.number_of_attemps > 5):
                 game_completed = True
                 game_won = False

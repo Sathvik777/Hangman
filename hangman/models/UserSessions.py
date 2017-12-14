@@ -1,4 +1,5 @@
 import uuid
+import random
 
 class UserSessions:
 
@@ -33,6 +34,11 @@ class UserSessions:
 
 
     def generate_new_session_key(self, username):
-        new_session_key = str(uuid.uuid4())
+        ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        chars=[]
+        for i in range(16):
+            chars.append(random.choice(ALPHABET))
+        
+        new_session_key = "".join(chars)
         self.add_Usersession(username, new_session_key)
         return new_session_key

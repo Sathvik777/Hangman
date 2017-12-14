@@ -1,11 +1,15 @@
-from gameSession import GameSession
+from models.gameSession import GameSession
 
 users_game_session = {}
 
 
 def start_game(session_key):
-    users_game_session[session_key] = GameSession()
+    print(session_key+"2P3fnkzwVeTSLbEP")
+    user_GameSession = GameSession()
+    users_game_session[session_key] = user_GameSession
     word_seleted_for_user = users_game_session.get(session_key).word_seleted
+
+    print(word_seleted_for_user+"  2P3fnkzwVeTSLbEP")
     return {'wordLength': len(word_seleted_for_user)}
 
 

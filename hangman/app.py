@@ -1,11 +1,11 @@
 import os
 from flask import Flask, request, jsonify
-from flask.ext.socketio import SocketIO, emit
-from UserSessions import UserSessions
+#from flask.ext.socketio import SocketIO, emit
+from models.UserSessions import UserSessions
 import gameLogic
 app = Flask(__name__, static_url_path='')
 app.config['SECRET_KEY'] = 'secret!'
-socketio = SocketIO(app)
+#socketio = SocketIO(app)
 
 
 UserSessionsCache = UserSessions()
@@ -26,26 +26,34 @@ def login():
 
 
 
-@socketio.on('start', namespace='/game')
-def game_start(json_resquest):
-    response = gameLogic.start_game(json_resquest.session_key)
-    emit('started', jsonify(response))
+@app.route('/start', methods = ['POST'])
+def game_start():
+
+    request.get_data()
+    json_resquest = request.json
+    print(json_resquest.get('session_key'))
+    response = gameLogic.start_game(json_resquest.get('session_key'))
+    return jsonify(response)
 
 
 
-@socketio.on('play', namespace='/game')
-def game_play(json_resquest):
-    emit('answer',jsonify(
-        gameLogic.play_game(json_resquest.session_key, json_resquest.key_pressed)
-        ))
+@app.route('/play', methods = ['POST'])
+def game_play():
+    request.get_data()
+    json_resquest = request.json
+    response = gameLogic.play_game(json_resquest.get('session_key'), json_resquest.get('key_pressed'))
+        
+    return jsonify(response)
 
-@socketio.on('end', namespace='/game')
-def game_play(json_resquest):
-    emit('ended',jsonify(
-        gameLogic.end_game(json_resquest.session_key)
-        ))
+
+@app.route('/end', methods = ['POST'])
+def game_end():
+    json_resquest = request.body
+    gameLogic.end_game(json_resquest.session_key)
+    
+    return jsonify({"status": "ok"})
 
 
 # start the server
 if __name__ == '__main__':
-    socketio.run(app)
+    app.run(debug=True)

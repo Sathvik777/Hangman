@@ -3,6 +3,7 @@ import uuid
 class UserSessions:
 
     def __init__(self):
+        print("__init__  UserSessions")
         self.UserSessionsData = {}
 
 
@@ -18,12 +19,15 @@ class UserSessions:
         return username in self.UserSessionsData
 
     def build_authentication_response(self, username):
+        if(self.check_user(username)):
+            session_key = self.UserSessionsData.get(username)
+        else:
+            session_key = self.generate_new_session_key(username)
         autuntication_response = {
-            'sessionKey' : self.UserSessionsData.get(
-                username, self.generate_new_session_key(username)
-                ),
+            'sessionKey' : session_key,
             'username': username
         }
+        print(autuntication_response["sessionKey"])
         return autuntication_response
 
 

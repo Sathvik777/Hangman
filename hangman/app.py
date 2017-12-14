@@ -1,11 +1,15 @@
 import os
-from flask import Flask, session
+from flask import Flask, request, jsonify
 from flask.ext.socketio import SocketIO, emit
-import uuid
+from UserSessions import UserSessions
 
 app = Flask(__name__, static_url_path='')
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app)
+
+
+UserSessionsCache = UserSessions()
+
 
 
 @app.route('/')
@@ -13,15 +17,24 @@ def mainIndex():
     print('in hello world')
     return app.send_static_file('index.html')
 
-@socketio.on('connect')
-def handle_message(username):
-    print('received message: ' + username)
+@app.route('/login', methods = ['GET'])
+def login():
+    username = request.args.get('username')
+    response = UserSessionsCache.build_authentication_response(username)
+    return jsonify(response)
+
+
+
+
+@socketio.on('start', namespace='/game')
+def game_start(session_key):
+    
     emit('word',"3dhubs")
 
 
-@socketio.on('game', namespace='/start')
-def handle_message(username):
-    print('received message: ' + username)
+
+@socketio.on('play', namespace='/game')
+def game_play(json_resquest):
     emit('word',"3dhubs")
 
 

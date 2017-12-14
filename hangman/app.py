@@ -2,7 +2,7 @@ import os
 from flask import Flask, request, jsonify
 from flask.ext.socketio import SocketIO, emit
 from UserSessions import UserSessions
-
+import gameLogic
 app = Flask(__name__, static_url_path='')
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app)
@@ -27,17 +27,23 @@ def login():
 
 
 @socketio.on('start', namespace='/game')
-def game_start(session_key):
-    
-    emit('word',"3dhubs")
+def game_start(json_resquest):
+    response = gameLogic.start_game(json_resquest.session_key)
+    emit('started', jsonify(response))
 
 
 
 @socketio.on('play', namespace='/game')
 def game_play(json_resquest):
-    emit('word',"3dhubs")
+    emit('answer',jsonify(
+        gameLogic.play_game(json_resquest.session_key, json_resquest.key_pressed)
+        ))
 
-
+@socketio.on('end', namespace='/game')
+def game_play(json_resquest):
+    emit('ended',jsonify(
+        gameLogic.end_game(json_resquest.session_key)
+        ))
 
 
 # start the server

@@ -21,12 +21,16 @@
     <div id="gameView" ng-controller="gameController">
 
         <div id="displayWord">
-            <input type="text" ng-model="name" placeholder="Enter name here">
+            
+            Guess the word : {{displayWord}}
+
+
 
         </div>
         <div id="inputFeild">
 
-
+            <input type="text" ng-model="guess" placeholder="Enter name here">
+            <button ng-click="charecterInput"></button>    
         </div>
 
     </div>

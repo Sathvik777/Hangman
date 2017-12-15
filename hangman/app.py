@@ -53,6 +53,14 @@ def game_end():
     
     return jsonify({"status": "ok"})
 
+@app.route('/leaderboard', methods = ['GET'])
+def game_end():
+    json_resquest = request.body
+    gameLogic.end_game(json_resquest.session_key)
+    
+    return jsonify({"status": "ok"})
+
+
 
 # start the server
 if __name__ == '__main__':

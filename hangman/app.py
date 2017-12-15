@@ -53,7 +53,7 @@ def game_end():
 
 
 @app.route('/leaderboard', methods=['GET'])
-def game_end():
+def get_leaderboard():
     json_resquest = request.body
     gameLogic.end_game(json_resquest.session_key)
 

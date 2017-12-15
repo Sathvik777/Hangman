@@ -15,7 +15,7 @@ class LeaderboardCache:
         self.cachedLeaderboard[username] = score
 
     def get_leadearboard(self):
-        OrderedDict(sorted(self.cachedLeaderboard.items(), key=lambda t: t[1]))
+        return OrderedDict(sorted(self.cachedLeaderboard.items(), key=lambda t: t[1]))
 
 
 

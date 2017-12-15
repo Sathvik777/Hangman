@@ -42,10 +42,4 @@ class GameSession:
                 'gameWon': game_won
             }
 
-        return response   
-
-
-            
-
-
-
+        return response

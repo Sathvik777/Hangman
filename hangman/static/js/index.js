@@ -56,10 +56,13 @@ angularApp.controller("gameController", ['$scope', function ($scope) {
     } else {
       /// verify if correct or wrong
       // make requet to server 
-      $post(serverUrl + "/play", { session_key: sessionKey, key_pressed: inpuLetterToLowerCase }).done(function (data) {
+      $post(serverUrl + "/play",
+       { session_key: sessionKey,
+         key_pressed: inpuLetterToLowerCase }
+        ).done(function (data) {
         console.log();
       }).fail(function () {
-
+        // reset to login page if authuntication error
 
       })
 

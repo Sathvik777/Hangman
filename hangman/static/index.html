@@ -21,16 +21,26 @@
     <div id="gameView" ng-controller="gameController">
 
         <div id="displayWord">
-            
-            Guess the word : {{displayWord}}
+
+            <div class="correctLetters">
+                <span ng-repeat="correctLettersChosen">
+                    Letters Correct : {{correctLetters}}
+                </span>
+            </div>
+            <div class="incorrectLetters">
+                <span ng-repeat="incorrectLettersChosen">
+                    Letters Incorrect: {{incorrectLetters}}
+                </span>
+            </div>
 
 
+            <div>Guess the word : {{displayWord}}</div>
 
         </div>
         <div id="inputFeild">
 
-            <input type="text" ng-model="guess" placeholder="Enter name here">
-            <button ng-click="charecterInput"></button>    
+            <input type="text" ng-model="input.guess" placeholder="Enter name here">
+            <button ng-click="charecterInput">Guess!</button>
         </div>
 
     </div>

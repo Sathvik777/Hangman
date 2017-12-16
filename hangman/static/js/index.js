@@ -14,8 +14,10 @@ angularApp.controller('loginController', ['$scope', function ($scope) {
       $("#loginView").hide();
       $scope.$broadcast('logedin', );
       console.log(autunticationResponse);
-      localStorage.setItem("sessionKey", autunticationResponse.sessionKey);
-      localStorage.setItem("username", autunticationResponse.username);
+      sessionKey = autunticationResponse.sessionKey;
+      username = autunticationResponse.username;
+      localStorage.setItem("sessionKey", sessionKey);
+      localStorage.setItem("username", username);
     });
   };
 
@@ -41,10 +43,58 @@ angularApp.controller("gameController", ['$scope', function ($scope) {
     $scope.correctLeters = [];
     $scope.guessLimit = 6;
     $scope.displayWord = Array(word.length).join('_ ');
-    console.log($scope.displayWord);
 
-    
+
   }
+
+  $scope.letterChosen = function () {
+    var inpuLetterToLowerCase = $scope.letter.toLowerCase();
+    if (contains.call(correctLeters, inpuLetterToLowerCase)) {
+      console.log($scope.letter);
+    } else if (contains.call(inCorrectLetters, inpuLetterToLowerCase)) {
+      console.log(inpuLetterToLowerCase);
+    } else {
+      /// verify if correct or wrong
+      // make requet to server 
+      $post(serverUrl + "/play", { session_key: sessionKey, key_pressed: inpuLetterToLowerCase }).done(function (data) {
+        console.log();
+      }).fail(function () {
+
+
+      })
+
+    }
+  }
+
+
   newGame();
 
 }]);
+
+
+var contains = function (needle) {
+  // Per spec, the way to identify NaN is that it is not equal to itself
+  var findNaN = needle !== needle;
+  var indexOf;
+
+  if (!findNaN && typeof Array.prototype.indexOf === 'function') {
+    indexOf = Array.prototype.indexOf;
+  } else {
+    indexOf = function (needle) {
+      var i = -1, index = -1;
+
+      for (i = 0; i < this.length; i++) {
+        var item = this[i];
+
+        if ((findNaN && item !== item) || item === needle) {
+          index = i;
+          break;
+        }
+      }
+
+      return index;
+    };
+  }
+
+  return indexOf.call(this, needle) > -1;
+};

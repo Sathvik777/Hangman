@@ -50,7 +50,7 @@ def game_end():
 @app.route('/leaderboard', methods=['GET'])
 def get_leaderboard():
     json_resquest = request.body
-
+    
     return jsonify({"status": "ok"})
 
 

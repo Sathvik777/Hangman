@@ -29,3 +29,7 @@ def end_game(session_key, score, username):
         # change argumeent oders
         leaderboardCache.add_new_score(username, score)
     del users_game_session[session_key]
+
+
+def game_leaderboard()
+    return leaderboardCache.get_leadearboard()

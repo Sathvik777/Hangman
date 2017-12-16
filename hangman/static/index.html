@@ -23,13 +23,15 @@
         <div id="displayWord">
 
             <div class="correctLetters">
-                <span ng-repeat="correctLettersChosen">
-                    Letters Correct : {{correctLetters}}
+                Letters Correct :
+                <span ng-repeat="correctLetters in correctLettersChosen">
+                    {{correctLetters}}
                 </span>
             </div>
             <div class="incorrectLetters">
-                <span ng-repeat="incorrectLettersChosen">
-                    Letters Incorrect: {{incorrectLetters}}
+                Letters Incorrect:
+                <span ng-repeat="incorrectLetters in incorrectLettersChosen">
+                    {{incorrectLetters}}
                 </span>
             </div>
 

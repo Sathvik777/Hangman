@@ -1,4 +1,8 @@
 from models.gameSession import GameSession
+from models.Leaderboard import LeaderboardCache
+
+
+leaderboardCache = LeaderboardCache(15)
 
 users_game_session = {}
 
@@ -10,7 +14,7 @@ def start_game(session_key):
     word_seleted_for_user = users_game_session.get(session_key).word_seleted
 
     print(word_seleted_for_user+"  2P3fnkzwVeTSLbEP")
-    return {'wordLength': len(word_seleted_for_user)}
+    return {'word': word_seleted_for_user}
 
 
 def play_game(session_key, key_pressed):
@@ -18,5 +22,10 @@ def play_game(session_key, key_pressed):
     response = game_session.get_answer_response(key_pressed.lower())
     return response
 
-def end_game(session_key):
+def end_game(session_key, score, username):
+    lowestScore = leaderboardCache.lowestScore
+    if (lowestScore < score):
+        #add userssession to this class 
+        # change argumeent oders
+        leaderboardCache.add_new_score(username, score)
     del users_game_session[session_key]

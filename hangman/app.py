@@ -34,20 +34,15 @@ def game_start():
     return jsonify(response)
 
 
-@app.route('/play', methods=['POST'])
-def game_play():
-    request.get_data()
-    json_resquest = request.json
-    response = gameLogic.play_game(json_resquest.get(
-        'session_key'), json_resquest.get('key_pressed'))
-
-    return jsonify(response)
-
 
 @app.route('/end', methods=['POST'])
 def game_end():
     json_resquest = request.body
-    gameLogic.end_game(json_resquest.session_key)
+    session_key = json_resquest.session_key
+    score = json_resquest.score
+    username = UserSessionsCache.get_username_with_sessionKey(session_key)
+
+    gameLogic.end_game(session_key, score, username)
 
     return jsonify({"status": "ok"})
 
@@ -55,7 +50,6 @@ def game_end():
 @app.route('/leaderboard', methods=['GET'])
 def get_leaderboard():
     json_resquest = request.body
-    gameLogic.end_game(json_resquest.session_key)
 
     return jsonify({"status": "ok"})
 

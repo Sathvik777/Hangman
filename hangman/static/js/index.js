@@ -1,4 +1,3 @@
-//var socket = io('http://' + document.domain + ':' + location.port);
 var angularApp = angular.module('hangmanApp', []);
 var serverUrl = 'http://' + document.domain + ':' + location.port;
 var sessionKey = localStorage.getItem('sessionKey');
@@ -6,8 +5,6 @@ var username = localStorage.getItem('username');
 
 
 angularApp.controller('loginController', ['$scope', function ($scope) {
-  console.log("loging ");
-  //socket = io.connect('http://' + document.domain + ':' + location.port);
   if (sessionKey !== null) $scope.name = username;
   $scope.myFunc = function () {
     $.get(serverUrl + "/login?username=" + $scope.name, function (autunticationResponse) {
@@ -20,11 +17,6 @@ angularApp.controller('loginController', ['$scope', function ($scope) {
       localStorage.setItem("username", username);
     });
   };
-
-  /*socket.on('word', function(data){
-          console.log(data);
-      });
-   */
 }]);
 
 angularApp.controller("gameController", ['$scope', function ($scope) {
@@ -33,6 +25,7 @@ angularApp.controller("gameController", ['$scope', function ($scope) {
   $scope.inCorrectLetters = [];
   $scope.correctLeters = [];
   $scope.guessLimit = 6;
+  $scope.score = 60;
   $scope.displayWord = '';
   $scope.input = {
     letter: ''
@@ -42,8 +35,13 @@ angularApp.controller("gameController", ['$scope', function ($scope) {
     $scope.inCorrectLetters = [];
     $scope.correctLeters = [];
     $scope.guessLimit = 6;
-    $scope.displayWord = Array(word.length).join('_ ');
-
+    $scope.score = 60;
+    $get(serverUrl+"/start", ).done(
+      function(data){
+        word = data.word;
+        $scope.displayWord = Array(word.length).join('_ ');
+      }
+    )
 
   }
 
@@ -54,6 +52,8 @@ angularApp.controller("gameController", ['$scope', function ($scope) {
     } else if (contains.call(inCorrectLetters, inpuLetterToLowerCase)) {
       console.log(inpuLetterToLowerCase);
     } else {
+      // get the word from the server 
+      
       /// verify if correct or wrong
       // make requet to server 
       $post(serverUrl + "/play",
@@ -63,6 +63,8 @@ angularApp.controller("gameController", ['$scope', function ($scope) {
         console.log();
       }).fail(function () {
         // reset to login page if authuntication error
+
+
 
       })
 

@@ -4,7 +4,6 @@ import random
 class UserSessions:
 
     def __init__(self):
-        print("__init__  UserSessions")
         self.UserSessionsData = {}
 
 
@@ -13,14 +12,16 @@ class UserSessions:
 
         self.UserSessionsData[username] = session_key
 
-    def check_session(self, session_key):
-        return session_key in self.UserSessionsData.values()
+    def get_username_with_sessionKey(self, session_key):
+        for username, session in self.UserSessionsData.items():
+            if session == session_key:
+                return username
 
     def check_user(self, username):
         return username in self.UserSessionsData
 
     def build_authentication_response(self, username):
-        if(self.check_user(username)):
+        if self.check_user(username):
             session_key = self.UserSessionsData.get(username)
         else:
             session_key = self.generate_new_session_key(username)

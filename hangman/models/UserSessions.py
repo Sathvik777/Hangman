@@ -29,7 +29,6 @@ class UserSessions:
             'sessionKey' : session_key,
             'username': username
         }
-        print(autuntication_response["sessionKey"])
         return autuntication_response
 
 

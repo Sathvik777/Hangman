@@ -2,6 +2,7 @@ import os
 from flask import Flask, request, jsonify
 #from flask.ext.socketio import SocketIO, emit
 from models.UserSessions import UserSessions
+import json
 import gameLogic
 app = Flask(__name__, static_url_path='')
 app.config['SECRET_KEY'] = 'secret!'
@@ -13,7 +14,6 @@ UserSessionsCache = UserSessions()
 
 @app.route('/')
 def mainIndex():
-    print('in hello world')
     return app.send_static_file('index.html')
 
 
@@ -29,7 +29,6 @@ def game_start():
 
     request.get_data()
     json_resquest = request.json
-    print(json_resquest.get('session_key'))
     response = gameLogic.start_game(json_resquest.get('session_key'))
     return jsonify(response)
 
@@ -50,7 +49,7 @@ def game_end():
 
 @app.route('/leaderboard', methods=['GET'])
 def get_leaderboard():
-    return jsonify(gameLogic.get_leadearboard())
+    return json.dumps(gameLogic.get_leadearboard())
 
 
 

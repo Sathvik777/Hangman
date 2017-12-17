@@ -19,7 +19,7 @@ angularApp.controller('loginController', ['$scope', function ($scope, $http) {
   };
 }]);
 
-angularApp.controller("gameController", ['$scope', function ($scope, $http) {
+angularApp.controller("gameController", ['$scope','$http', function ($scope, $http) {
   var word = "3dhubs";
   $scope.inCorrectLetters = [];
   $scope.correctLeters = [];
@@ -29,15 +29,12 @@ angularApp.controller("gameController", ['$scope', function ($scope, $http) {
   $scope.input = {
     letter: ''
   }
-  $http
-
   var newGame = function () {
     $scope.inCorrectLetters = [];
     $scope.correctLeters = [];
     $scope.guessLimit = 6;
     $scope.score = 60;
-    $http.post(serverUrl + "/start", { "session_key": sessionKey }).done(
-      function (data) {
+    $http.post(serverUrl + "/start", { "session_key": sessionKey } , function (data) {
         word = data.word;
         $scope.displayWord = Array(word.length).join('_ ');
       }
@@ -74,7 +71,7 @@ angularApp.controller("gameController", ['$scope', function ($scope, $http) {
   }
 
 
-  //newGame();
+  newGame();
 
 }]);
 

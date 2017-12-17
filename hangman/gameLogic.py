@@ -26,7 +26,7 @@ def end_game(session_key, score, username):
         # add userssession to this class
         # change argumeent oders
         leaderboardCache.add_new_score(username, score)
-    #del users_game_session[session_key]
+    del users_game_session[session_key]
 
 
 def get_leadearboard():

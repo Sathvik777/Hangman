@@ -12,9 +12,12 @@ class LeaderboardCache:
 
 
     def add_new_score(self, username, score):
-        if(self.cachedLeaderboard[username] < score):
+        if username in self.cachedLeaderboard:
+            if(self.cachedLeaderboard[username] < score):
+                self.cachedLeaderboard[username] = score
+        else:
             self.cachedLeaderboard[username] = score
-
+            
 
     def get_leadearboard(self):
         return OrderedDict(sorted(self.cachedLeaderboard.items(), key=lambda t: t[1]))

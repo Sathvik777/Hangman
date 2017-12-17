@@ -4,10 +4,10 @@ var sessionKey = localStorage.getItem('sessionKey');
 var username = localStorage.getItem('username');
 
 
-angularApp.controller('loginController', ['$scope', function ($scope) {
+angularApp.controller('loginController', ['$scope', function ($scope, $http) {
   if (sessionKey !== null) $scope.name = username;
   $scope.myFunc = function () {
-    $.get(serverUrl + "/login?username=" + $scope.name, function (autunticationResponse) {
+    $http.get(serverUrl + "/login?username=" + $scope.name, function (autunticationResponse) {
       $("#loginView").hide();
       $scope.$broadcast('logedin', );
       console.log(autunticationResponse);
@@ -19,8 +19,7 @@ angularApp.controller('loginController', ['$scope', function ($scope) {
   };
 }]);
 
-angularApp.controller("gameController", ['$scope', function ($scope) {
-  // TODO: Get word length or word from server 
+angularApp.controller("gameController", ['$scope', function ($scope, $http) {
   var word = "3dhubs";
   $scope.inCorrectLetters = [];
   $scope.correctLeters = [];
@@ -30,14 +29,15 @@ angularApp.controller("gameController", ['$scope', function ($scope) {
   $scope.input = {
     letter: ''
   }
+  $http
 
   var newGame = function () {
     $scope.inCorrectLetters = [];
     $scope.correctLeters = [];
     $scope.guessLimit = 6;
     $scope.score = 60;
-    $get(serverUrl+"/start", ).done(
-      function(data){
+    $http.post(serverUrl + "/start", { "session_key": sessionKey }).done(
+      function (data) {
         word = data.word;
         $scope.displayWord = Array(word.length).join('_ ');
       }
@@ -53,13 +53,15 @@ angularApp.controller("gameController", ['$scope', function ($scope) {
       console.log(inpuLetterToLowerCase);
     } else {
       // get the word from the server 
-      
+
       /// verify if correct or wrong
       // make requet to server 
       $post(serverUrl + "/play",
-       { session_key: sessionKey,
-         key_pressed: inpuLetterToLowerCase }
-        ).done(function (data) {
+        {
+          session_key: sessionKey,
+          key_pressed: inpuLetterToLowerCase
+        }
+      ).done(function (data) {
         console.log();
       }).fail(function () {
         // reset to login page if authuntication error
@@ -72,9 +74,17 @@ angularApp.controller("gameController", ['$scope', function ($scope) {
   }
 
 
-  newGame();
+  //newGame();
 
 }]);
+
+angularApp.controller('leaderboardViewController', ['$scope', '$http', function ($scope, $http) {
+  $scope.friends = [];
+  $http.get(serverUrl + "/leaderboard" , function(response){
+    $scope.friends.append(response);
+  });
+}]);
+
 
 
 var contains = function (needle) {

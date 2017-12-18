@@ -23,13 +23,12 @@ angularApp.controller('rootController', ['$scope', '$rootScope', function ($scop
   console.log("session key set to true");
   if (sessionKey !== null) {
     $("#loginView").hide();
-    console.log("session key set to false");
     $scope.name = username;
-    $rootScope.$broadcast('loggedin', );
-
   } else {
     $("#gameView").hide();
     $("#loginView").show();
+    $("#leaderboardView").hide();
+
   }
 
 }]);
@@ -39,7 +38,7 @@ angularApp.controller('rootController', ['$scope', '$rootScope', function ($scop
 angularApp.controller('loginController', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
 
 
-  $scope.myFunc = function () {
+  $scope.loginFunction = function () {
     $http.get(serverUrl + "/login?username=" + $scope.name).then(function (autunticationResponse) {
       console.log(autunticationResponse.data);
       sessionKey = autunticationResponse.data.sessionKey;
@@ -47,6 +46,7 @@ angularApp.controller('loginController', ['$scope', '$http', '$rootScope', funct
       localStorage.setItem("sessionKey", sessionKey);
       localStorage.setItem("username", username);
       $("#loginView").hide();
+      $("#leaderboardView").hide();
       $rootScope.$broadcast('loggedin', );
 
     });
@@ -145,10 +145,13 @@ angularApp.controller("gameController", ['$scope', '$http', '$rootScope', functi
 
 angularApp.controller('leaderboardViewController', ['$scope', '$http', function ($scope, $http) {
   $scope.leaderBoard = [];
-  $http.get(serverUrl + "/leaderboard").then(function (response) {
-    console.log(response.data);
-    $scope.leaderBoard = response.data;
-  });
+  $scope.showLeaderboard = function () {
+
+    $http.get(serverUrl + "/leaderboard").then(function (response) {
+      console.log(response.data);
+      $scope.leaderBoard = response.data;
+    });
+  }
 }]);
 
 
@@ -179,3 +182,14 @@ var contains = function (needle) {
 
   return indexOf.call(this, needle) > -1;
 };
+angularApp.directive("limitTo", [function () {
+  return {
+    restrict: "A",
+    link: function (scope, elem, attrs) {
+      var limit = parseInt(attrs.limitTo);
+      angular.element(elem).on("keypress", function (e) {
+        if (this.value.length == limit) e.preventDefault();
+      });
+    }
+  }
+}]);

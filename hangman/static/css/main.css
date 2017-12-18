@@ -1,3 +1,17 @@
 p.display-word{
     letter-spacing: 10px;
 }
+
+div#loginView{
+    padding-top: 15%;
+    margin-left: 20%;
+}
+
+h3.gameTitle{
+    padding-top: 5%;
+    margin-left: 20%;
+}
+
+div#leaderboardView{
+    padding-top: 20px;
+}

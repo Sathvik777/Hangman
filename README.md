@@ -12,7 +12,7 @@
 #### Install and Run - Instructions
 ------------------------
 
-- Clone the repository: `git clone https://github.com/Sathvik777/ViaPlayNode-Test.git`
+- Clone the repository: `git clone https://github.com/Sathvik777/Hangman.git`
 
 - Change working directory to ViaPlayNode-Test:`cd Hangman_app`
 

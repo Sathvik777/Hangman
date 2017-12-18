@@ -1,12 +1,11 @@
 import os
 from flask import Flask, request, jsonify
-from flask.ext.api import status
+from flask_api import status
 from models.UserSessions import UserSessions
 import json
 import gameLogic
 app = Flask(__name__, static_url_path='')
 app.config['SECRET_KEY'] = 'secret!'
-#socketio = SocketIO(app)
 
 
 UserSessionsCache = UserSessions()
@@ -19,25 +18,29 @@ def mainIndex():
 
 @app.route('/login', methods=['GET'])
 def login():
-    username = request.args.get('username')
-    if username in None :
+    username = None
+    try:
+        username = request.args.get('username')
+    except TypeError:
         return status.HTTP_401_UNAUTHORIZED
-    else:
-        response = UserSessionsCache.build_authentication_response(username)
-        return jsonify(response)
-    
+    if username is None:
+        return '', status.HTTP_400_BAD_REQUEST
+    response = UserSessionsCache.build_authentication_response(username)
+    return jsonify(response)   
 
 
 @app.route('/start', methods=['POST'])
 def game_start():
 
     request.get_data()
+    print(request.get_data())
     json_resquest = request.json
+    print(json_resquest.get('session_key'))
     session_key = json_resquest.get('session_key')
-    if session_key in None :
-        return status.HTTP_401_UNAUTHORIZED
+    if session_key is None :
+        return '',status.HTTP_401_UNAUTHORIZED
     else:    
-        response = gameLogic.start_game()
+        response = gameLogic.start_game(session_key)
         return jsonify(response)
 
 
@@ -46,22 +49,22 @@ def game_start():
 def game_end():
     request.get_data()
     json_resquest = request.json
-    session_key = json_resquest.get('session_key')
-    if session_key in None :
-        return status.HTTP_401_UNAUTHORIZED
-    else:
-        score = json_resquest.get('score')
-        username = UserSessionsCache.get_username_with_sessionKey(session_key)
-        try:
-            gameLogic.end_game(session_key, score, username)
-            return jsonify({"status": "ok"})
-        except KeyError:
-            return status.HTTP_400_BAD_REQUEST
+    try:
+        session_key = json_resquest.get('session_key')
+    except TypeError:
+        return status.HTTP_400_BAD_REQUEST
+
+    score = json_resquest.get('score')
+    username = UserSessionsCache.get_username_with_sessionKey(session_key)
+    gameLogic.end_game(session_key, score, username)
+    return jsonify({"status": "ok"})
         
+
+
 
 @app.route('/leaderboard', methods=['GET'])
 def get_leaderboard():
-    return json.dumps(gameLogic.get_leadearboard())
+    return jsonify(gameLogic.get_leadearboard())
 
 
 

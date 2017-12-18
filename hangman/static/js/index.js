@@ -106,10 +106,22 @@ angularApp.controller("gameController", ['$scope', '$http', '$rootScope', functi
       $scope.input.guess="";
       if($scope.guessLimit==0) {
         // You Lose
-        console.log("lost");        
+        console.log("lost");
+        var requestBody = JSON.stringify({ 'session_key': localStorage.getItem('sessionKey')});
+        
+        $http.post(serverUrl + "/end?won=0", requestBody).then(function (response) {
+          
+        });        
       }
       if($scope.displayWord.indexOf("_")==-1) {
         // Show score
+        var requestBody = JSON.stringify({ 'session_key': localStorage.getItem('sessionKey'),
+        'score' : $scope.guessLimit*10
+      });
+        
+        $http.post(serverUrl + "/end?won=0", requestBody).then(function (response) {
+          
+        }); 
        
       }
 

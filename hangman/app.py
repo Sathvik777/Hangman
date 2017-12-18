@@ -50,13 +50,20 @@ def game_end():
     request.get_data()
     json_resquest = request.json
     try:
+        didwin = int(request.args.get('won'))
         session_key = json_resquest.get('session_key')
+        print(didwin)
+
     except TypeError:
-        return status.HTTP_400_BAD_REQUEST
+        return '',status.HTTP_400_BAD_REQUEST
+
+    if didwin < 1:
+        gameLogic.end_game_without_update(session_key)
+        return jsonify({"status": "ok"})
 
     score = json_resquest.get('score')
     username = UserSessionsCache.get_username_with_sessionKey(session_key)
-    gameLogic.end_game(session_key, score, username)
+    gameLogic.end_game_update_score(session_key, score, username)
     return jsonify({"status": "ok"})
         
 

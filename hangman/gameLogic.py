@@ -20,7 +20,7 @@ def play_game(session_key, key_pressed):
     return response
 
 
-def end_game(session_key, score, username):
+def end_game_update_score(session_key, score, username):
     lowestScore = leaderboardCache.lowestScore
     if (lowestScore < score):
         # add userssession to this class
@@ -28,6 +28,9 @@ def end_game(session_key, score, username):
         leaderboardCache.add_new_score(username, score)
     del users_game_session[session_key]
 
+
+def end_game_without_update(session_key):
+    del users_game_session[session_key]
 
 def get_leadearboard():
     response = []

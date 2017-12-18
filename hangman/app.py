@@ -33,9 +33,7 @@ def login():
 def game_start():
 
     request.get_data()
-    print(request.get_data())
     json_resquest = request.json
-    print(json_resquest.get('session_key'))
     session_key = json_resquest.get('session_key')
     if session_key is None :
         return '',status.HTTP_401_UNAUTHORIZED
@@ -52,8 +50,7 @@ def game_end():
     try:
         didwin = int(request.args.get('won'))
         session_key = json_resquest.get('session_key')
-        print(didwin)
-
+        
     except TypeError:
         return '',status.HTTP_400_BAD_REQUEST
 

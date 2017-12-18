@@ -119,7 +119,7 @@ angularApp.controller("gameController", ['$scope', '$http', '$rootScope', functi
         'score' : $scope.guessLimit*10
       });
         
-        $http.post(serverUrl + "/end?won=0", requestBody).then(function (response) {
+        $http.post(serverUrl + "/end?won=1", requestBody).then(function (response) {
           
           newGame();
         }); 

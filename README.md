@@ -110,7 +110,7 @@ API-USEAGE:
 
 
 
-#### Important Endpoints
+#### Important Notes
 ------------------------
 
 * For ease of use app uses in-memory insted of database. So, If server is stoped data will be lost

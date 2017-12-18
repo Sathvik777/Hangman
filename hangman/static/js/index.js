@@ -110,7 +110,7 @@ angularApp.controller("gameController", ['$scope', '$http', '$rootScope', functi
         var requestBody = JSON.stringify({ 'session_key': localStorage.getItem('sessionKey')});
         
         $http.post(serverUrl + "/end?won=0", requestBody).then(function (response) {
-          
+          newGame();
         });        
       }
       if($scope.displayWord.indexOf("_")==-1) {
@@ -121,8 +121,8 @@ angularApp.controller("gameController", ['$scope', '$http', '$rootScope', functi
         
         $http.post(serverUrl + "/end?won=0", requestBody).then(function (response) {
           
+          newGame();
         }); 
-       
       }
 
 

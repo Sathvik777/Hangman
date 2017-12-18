@@ -11,14 +11,14 @@
 
 <body ng-app="hangmanApp">
     <div ng-controller="rootController" class="container">
-        <div  id="loginView"  ng-controller="loginController" >
+        <div id="loginView" ng-controller="loginController">
             <p>Name :
                 <input type="text" ng-model="name" placeholder="Enter name here">
             </p>
             <h1>Hello {{name}}</h1>
             <button ng-click="myFunc()">Log in</button>
         </div>
-        <div id="gameView" ng-show="{showGame}" ng-controller="gameController" >
+        <div id="gameView" ng-show="{showGame}" ng-controller="gameController">
 
             <div id="displayWord">
 
@@ -48,27 +48,25 @@
         </div>
 
         <div id="leaderboardView" ng-controller="leaderboardViewController">
+            <button ng-click="showLeaderboard()">Show Leaderboard!</button>
 
-            <div id="displayWord">
+            <div class="leaderboard">
 
-                <div class="leaderboard">
+                <table class="table">
 
-                    <table class="table">
-
-                        <caption>Leaderboard</caption>
-                        <tr>
-                            <th>Name</th>
-                            <th>Score</th>
-                        </tr>
-                        <tr ng-repeat="leader in leaderBoard | orderBy:'-score'">
-                            <td>{{leader.name}}</td>
-                            <td>{{leader.score}}</td>
-                        </tr>
-                    </table>
-                </div>
+                    <caption>Leaderboard</caption>
+                    <tr>
+                        <th>Name</th>
+                        <th>Score</th>
+                    </tr>
+                    <tr ng-repeat="leader in leaderBoard | orderBy:'-score'">
+                        <td>{{leader.name}}</td>
+                        <td>{{leader.score}}</td>
+                    </tr>
+                </table>
             </div>
-
         </div>
+
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>

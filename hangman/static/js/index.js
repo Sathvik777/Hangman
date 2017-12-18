@@ -3,7 +3,11 @@ var serverUrl = 'http://' + document.domain + ':' + location.port;
 var sessionKey = localStorage.getItem('sessionKey');
 var username = localStorage.getItem('username');
 
-angularApp.controller('rootController', ['$scope', '$rootScope', function ($scope,$rootScope) {
+String.prototype.replaceAt = function (index, replacement) {
+  return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+}
+
+angularApp.controller('rootController', ['$scope', '$rootScope', function ($scope, $rootScope) {
   $scope.inCorrectLetters = [];
   $scope.correctLeters = [];
   $scope.guessLimit = 6;
@@ -15,14 +19,15 @@ angularApp.controller('rootController', ['$scope', '$rootScope', function ($scop
   $scope.session_key = sessionKey;
   $scope.myFunc;
   $scope.leaderBoard = [];
+  $scope.message = ''
   console.log("session key set to true");
   if (sessionKey !== null) {
     $("#loginView").hide();
     console.log("session key set to false");
     $scope.name = username;
-    $rootScope.$broadcast('loggedin',);
+    $rootScope.$broadcast('loggedin', );
 
-  } else{
+  } else {
     $("#gameView").hide();
     $("#loginView").show();
   }
@@ -32,17 +37,17 @@ angularApp.controller('rootController', ['$scope', '$rootScope', function ($scop
 
 
 angularApp.controller('loginController', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
-  
-  
+
+
   $scope.myFunc = function () {
-    $http.get(serverUrl + "/login?username=" + $scope.name).then( function (autunticationResponse) {
+    $http.get(serverUrl + "/login?username=" + $scope.name).then(function (autunticationResponse) {
       console.log(autunticationResponse.data);
       sessionKey = autunticationResponse.data.sessionKey;
       username = autunticationResponse.data.username;
       localStorage.setItem("sessionKey", sessionKey);
       localStorage.setItem("username", username);
       $("#loginView").hide();
-      $rootScope.$broadcast('loggedin',);
+      $rootScope.$broadcast('loggedin', );
 
     });
   };
@@ -56,7 +61,7 @@ angularApp.controller("gameController", ['$scope', '$http', '$rootScope', functi
   $scope.correctLeters = [];
   $scope.guessLimit = 6;
   $scope.score = 60;
-  
+
   newGame = function (event, sessionKey) {
     $("#gameView").show();
     console.log("new game troggered");
@@ -67,7 +72,7 @@ angularApp.controller("gameController", ['$scope', '$http', '$rootScope', functi
     var requestBody = JSON.stringify({ 'session_key': localStorage.getItem('sessionKey') });
     $http.post(serverUrl + "/start", requestBody).then(function (response) {
       selectedWord = response.data.word;
-      $scope.displayWord = Array(selectedWord.length).join('_ ');
+      $scope.displayWord = Array(selectedWord.length).join('_');
     });
   }
 
@@ -83,58 +88,57 @@ angularApp.controller("gameController", ['$scope', '$http', '$rootScope', functi
 
       /// verify if correct or wrong
       // make requet to server 
-      var correct=false;
-      for(var i=0;i<selectedWord.length;i++) {
-        if(selectedWord[i].toLowerCase()==inpuLetterToLowerCase) {
-          $scope.displayWord=$scope.displayWord.slice(0,i)+$scope.input.guess.toUpperCase()+$scope.displayWord.slice(i+1);
-          correct=true;
-  
+      var correct = false;
+      for (var i = 0; i < selectedWord.length; i++) {
+        if (selectedWord[i].toLowerCase() == inpuLetterToLowerCase) {
+          $scope.displayWord = $scope.displayWord.substr(0, i) + inpuLetterToLowerCase + $scope.displayWord.substr(i + inpuLetterToLowerCase.length);
+          //$scope.displayWord = selectedWord;
+          correct = true;
+
         }
       }
-      if(correct) {
-        console.log("entering thsi loop ");
-        $scope.correctLeters = $scope.correctLetters.concat(inpuLetterToLowerCase);
+      if (correct) {
+        $scope.correctLetters = $scope.correctLetters.concat(inpuLetterToLowerCase);
         console.log($scope.correctLeters);
       } else {
-        console.log("entering thsi loop ");
         $scope.guessLimit--;
         $scope.inCorrectLetters = $scope.inCorrectLetters.concat(inpuLetterToLowerCase);
         console.log($scope.inCorrectLetters);
-        
+
       }
-      
-      $scope.input.guess="";
-      if($scope.guessLimit==0) {
-        // You Lose
-        console.log("lost");
-        var requestBody = JSON.stringify({ 'session_key': localStorage.getItem('sessionKey')});
-        
+
+      $scope.input.guess = "";
+      if ($scope.guessLimit == 0) {
+        $scope.message = "You Lost";
+        var requestBody = JSON.stringify({ 'session_key': localStorage.getItem('sessionKey') });
+
         $http.post(serverUrl + "/end?won=0", requestBody).then(function (response) {
           newGame();
-        });        
+        });
       }
-      if($scope.displayWord.indexOf("_")==-1) {
-        // Show score
-        var requestBody = JSON.stringify({ 'session_key': localStorage.getItem('sessionKey'),
-        'score' : $scope.guessLimit*10
-      });
-        
+      if ($scope.displayWord.indexOf("_") == -1) {
+        $scope.message = "You Won with score " + $scope.guessLimit * 10;
+        var requestBody = JSON.stringify({
+          'session_key': localStorage.getItem('sessionKey'),
+          'score': $scope.guessLimit * 10
+        });
+
         $http.post(serverUrl + "/end?won=1", requestBody).then(function (response) {
-          
+
           newGame();
-        }); 
+        });
       }
 
 
-      
+
 
     }
   }
-  if(sessionKey !== null){
+  if (sessionKey !== null) {
 
     newGame();
   }
-  $rootScope.$on('loggedin', function(){
+  $rootScope.$on('loggedin', function () {
     newGame();
   });
 }]);
@@ -143,7 +147,7 @@ angularApp.controller('leaderboardViewController', ['$scope', '$http', function 
   $scope.leaderBoard = [];
   $http.get(serverUrl + "/leaderboard").then(function (response) {
     console.log(response.data);
-    $scope.leaderBoard= response.data;
+    $scope.leaderBoard = response.data;
   });
 }]);
 

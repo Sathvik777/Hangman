@@ -20,7 +20,7 @@
 
 - Install all packages need: `pip install -r requirements.txt --no-index`
 
-- Run tests to make sure Endpoint is working: `python base_test`
+- Run tests to make sure Endpoint is working: `python base_test.py`
 
 - Start the Node server : `python app.py`
 
